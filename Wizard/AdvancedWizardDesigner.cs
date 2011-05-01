@@ -224,35 +224,26 @@ namespace AdvancedWizardControl.Wizard
 
         private void ChangeServiceComponentAdded(object sender, ComponentEventArgs e)
         {
-            if (!((IDesignerHost) sender).Loading)
-            {
-                if (e.Component is AdvancedWizardPage)
-                {
-                    var page = e.Component as AdvancedWizardPage;
+            if (((IDesignerHost) sender).Loading) return;
+            if (!(e.Component is AdvancedWizardPage)) return;
+            var page = e.Component as AdvancedWizardPage;
+            if (_wizard.WizardPages.Contains(page)) return;
 
-                    if (! _wizard.WizardPages.Contains(page))
-                    {
-                        AddPageToContainers(page);
-                        DisplayPage(page);
-                        SelectPageInProperyGrid(page);
-                        UpdateWizard(page);
-                    }
-                }
-            }
+            AddPageToContainers(page);
+            DisplayPage(page);
+            SelectPageInProperyGrid(page);
+            UpdateWizard(page);
         }
 
         private void ChangeServiceComponentRemoved(object sender, ComponentEventArgs e)
         {
-            if (!((IDesignerHost) sender).Loading)
-            {
-                if (e.Component is AdvancedWizardPage)
-                {
-                    var page = e.Component as AdvancedWizardPage;
-                    _wizard.WizardPages.Remove(page);
-                    _wizard.SelectPreviousPage();
-                    _wizard.SetButtonStates();
-                }
-            }
+            if (((IDesignerHost) sender).Loading) return;
+            var advancedWizardPage = e.Component as AdvancedWizardPage;
+            if (advancedWizardPage == null) return;
+
+            _wizard.WizardPages.Remove(advancedWizardPage);
+            _wizard.SelectPreviousPage();
+            _wizard.SetButtonStates();
         }
 
         #endregion
