@@ -33,11 +33,6 @@ namespace AdvancedWizardControl.Wizard
             InitializeDesigner();
         }
 
-        private SelectionRules DoNotAllowPageToBeManipulatedByMouse()
-        {
-            return base.SelectionRules & SelectionRules.None;
-        }
-
         #endregion
 
         #region protected
@@ -54,10 +49,9 @@ namespace AdvancedWizardControl.Wizard
 
         private AdvancedWizardPage _page;
 
-        private void InitializeDesigner()
+        private void GetReferenceToWizardPage()
         {
-            DrawGrid = true;
-            EnableDragDrop(true);
+            _page = (Control as AdvancedWizardPage);
         }
 
         private void InitializeWizardPage()
@@ -65,9 +59,15 @@ namespace AdvancedWizardControl.Wizard
             _page.AllowDrop = false;
         }
 
-        private void GetReferenceToWizardPage()
+        private void InitializeDesigner()
         {
-            _page = (Control as AdvancedWizardPage);
+            DrawGrid = true;
+            EnableDragDrop(true);
+        }      
+
+        private SelectionRules DoNotAllowPageToBeManipulatedByMouse()
+        {
+            return base.SelectionRules & SelectionRules.None;
         }
 
         #endregion
