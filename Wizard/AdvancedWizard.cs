@@ -25,7 +25,7 @@ namespace AdvancedWizardControl.Wizard
         {
             InitializeComponent();
             _pages = new AdvancedWizardPageCollection();
-            _wizardStrategy = DesignMode ? WizardStrategy.CreateDesignTimeWizard(this) : WizardStrategy.CreateRuntimeTimeWizard(this);
+            _wizardStrategy = WizardStrategy.CreateWizard(DesignMode, this);
             FlatStyle = FlatStyle.Standard;
         }
 

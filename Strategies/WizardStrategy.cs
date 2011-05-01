@@ -16,13 +16,11 @@ namespace AdvancedWizardControl.Strategies
         public abstract void GoToPage(int pageIndex);
         public abstract void GoToPage(AdvancedWizardPage page);
 
-        public static WizardStrategy CreateDesignTimeWizard(AdvancedWizard wizard)
+        public static WizardStrategy CreateWizard(bool DesignMode, AdvancedWizard wizard)
         {
-            return new DesignTimeWizardStrategy(wizard);
-        }
+            if(DesignMode)
+                return new DesignTimeWizardStrategy(wizard);
 
-        public static WizardStrategy CreateRuntimeTimeWizard(AdvancedWizard wizard)
-        {
             return new RuntimeWizardStrategy(wizard);
         }
     }
