@@ -1,4 +1,5 @@
 ﻿using System;
+using AdvancedWizardControl.Enums;
 
 namespace AdvancedWizardControl.EventArguments
 {
@@ -8,15 +9,15 @@ namespace AdvancedWizardControl.EventArguments
     /// </summary>
     public class WizardEventArgs : EventArgs
     {
-        public WizardEventArgs(int currentPageIndex)
+        public WizardEventArgs(int currentPageIndex, Direction direction = Direction.Forward)
         {
             CurrentPageIndex = currentPageIndex;
-            NextPageIndex = currentPageIndex + 1; // defaults to the very next page after the current one
+            NextPageIndex = direction == Direction.Forward ? currentPageIndex + 1 : currentPageIndex - 1;
             AllowPageChange = true;
         }
 
         public bool AllowPageChange { get; set; }
-        public int CurrentPageIndex { get; private set; }
+        public int CurrentPageIndex { get; }
         public int NextPageIndex { get; set; }
     }
 }

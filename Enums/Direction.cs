@@ -1,7 +1,8 @@
 ﻿namespace AdvancedWizardControl.Enums
 {
-    internal enum Direction
+    public enum Direction
     {
-        Forward = 0
+        Forward = 0,
+        Backward = 1
     }
 }

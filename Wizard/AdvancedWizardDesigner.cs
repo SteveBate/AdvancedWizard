@@ -27,29 +27,7 @@ namespace AdvancedWizardControl.Wizard
     /// </summary>
     internal class AdvancedWizardDesigner : ParentControlDesigner
     {
-        #region public
-
-        public override DesignerVerbCollection Verbs
-        {
-            get
-            {
-                return _verbs ?? (_verbs = new DesignerVerbCollection
-                                               {
-                                                   new DesignerVerb(
-                                                       "New WizardPage",
-                                                       OnVerbNew),
-                                                   new DesignerVerb(
-                                                       "Prev WizardPage",
-                                                       OnVerbPrev),
-                                                   new DesignerVerb(
-                                                       "Next WizardPage",
-                                                       OnVerbNext),
-                                                   new DesignerVerb(
-                                                       "About",
-                                                       OnVerbAbout)
-                                               });
-            }
-        }
+        public override DesignerVerbCollection Verbs => _verbs ?? (_verbs = new DesignerVerbCollection { new DesignerVerb("New WizardPage", OnVerbNew), new DesignerVerb("Prev WizardPage", OnVerbPrev), new DesignerVerb("Next WizardPage", OnVerbNext), new DesignerVerb("About", OnVerbAbout)});
 
         public override void Initialize(IComponent c)
         {
@@ -69,10 +47,6 @@ namespace AdvancedWizardControl.Wizard
 
             base.Dispose(disposing);
         }
-
-        #endregion
-
-        #region protected
 
         protected override void PostFilterProperties(IDictionary properties)
         {
@@ -118,23 +92,6 @@ namespace AdvancedWizardControl.Wizard
             }
         }
 
-        #endregion
-
-        #region private
-
-        private IComponentChangeService _changeService;
-        private IDesignerHost _designer;
-        private ISelectionService _selectionService;
-        private DesignerVerbCollection _verbs;
-        private AdvancedWizard _wizard;
-        private const int VerbPrevious = 1;
-        private const int VerbNext = 2;
-
-        private void OnVerbNew(object sender, EventArgs e)
-        {
-            _designer.CreateComponent(typeof (AdvancedWizardPage));
-        }
-
         private void OnVerbPrev(object sender, EventArgs e)
         {
             if (! _wizard.WizardHasNoPages() && _wizard.IndexOfCurrentPage() > 0)
@@ -157,42 +114,38 @@ namespace AdvancedWizardControl.Wizard
             }
         }
 
-        private static void OnVerbAbout(object sender, EventArgs e)
+        private static void OnVerbAbout(object sender, EventArgs e) => MessageBox.Show("Written by Steve Bate", "About AdvancedWizard", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+        private void OnVerbNew(object sender, EventArgs e)
         {
-            MessageBox.Show("Written by Steve Bate", "About AdvancedWizard", MessageBoxButtons.OK,
-                            MessageBoxIcon.Information);
+            try
+            {
+                _designer.CreateComponent(typeof(AdvancedWizardPage));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
         }
 
-        private void InitializeWizardControl()
-        {
-            _wizard.AllowDrop = false;
-        }
+        private void InitializeWizardControl() => _wizard.AllowDrop = false;
 
-        private void InitializeDesigner()
-        {
-            DrawGrid = false;
-        }
+        private void InitializeDesigner() => DrawGrid = false;
 
-        private void GetReferenceToWizardControl(IComponent c)
-        {
-            _wizard = ((Control) c as AdvancedWizard);
-        }
+        private void GetReferenceToWizardControl(IComponent c) => _wizard = ((Control) c as AdvancedWizard);
+
+        private void GetReferenceToIDesignerHost() => _designer = (IDesignerHost) GetService(typeof (IDesignerHost));
+
+        private void GetReferenceToISelectionService() => _selectionService = (ISelectionService) GetService(typeof (ISelectionService));
+
+        private void SelectPageInProperyGrid(AdvancedWizardPage page) => _selectionService.SetSelectedComponents(new object[] { page }, SelectionTypes.MouseDown);
 
         private void GetReferenceToIComponentChangeService()
         {
-            _changeService = (IComponentChangeService) GetService(typeof (IComponentChangeService));
+            _changeService = (IComponentChangeService)GetService(typeof(IComponentChangeService));
+            if (_changeService == null) return;
             _changeService.ComponentAdded += ChangeServiceComponentAdded;
             _changeService.ComponentRemoved += ChangeServiceComponentRemoved;
-        }
-
-        private void GetReferenceToIDesignerHost()
-        {
-            _designer = (IDesignerHost) GetService(typeof (IDesignerHost));
-        }
-
-        private void GetReferenceToISelectionService()
-        {
-            _selectionService = (ISelectionService) GetService(typeof (ISelectionService));
         }
 
         private void UpdateWizard(AdvancedWizardPage page)
@@ -212,16 +165,7 @@ namespace AdvancedWizardControl.Wizard
             _wizard.WizardPages.Add(page);
             _wizard.Controls.Add(page);
         }
-
-        private void SelectPageInProperyGrid(AdvancedWizardPage page)
-        {
-            _selectionService.SetSelectedComponents(new object[] {page}, SelectionTypes.MouseDown);
-        }
-
-        #endregion
-
-        #region events
-
+        
         private void ChangeServiceComponentAdded(object sender, ComponentEventArgs e)
         {
             if (((IDesignerHost) sender).Loading) return;
@@ -246,6 +190,12 @@ namespace AdvancedWizardControl.Wizard
             _wizard.SetButtonStates();
         }
 
-        #endregion
+        private IComponentChangeService _changeService;
+        private IDesignerHost _designer;
+        private ISelectionService _selectionService;
+        private DesignerVerbCollection _verbs;
+        private AdvancedWizard _wizard;
+        private const int VerbPrevious = 1;
+        private const int VerbNext = 2;
     }
 }

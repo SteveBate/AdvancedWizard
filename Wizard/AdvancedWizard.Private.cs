@@ -9,41 +9,6 @@ namespace AdvancedWizardControl.Wizard
 {
     public partial class AdvancedWizard
     {
-        #region private
-
-        private const int VkEscape = 27;
-        private const int VkReturn = 13;
-        private const int WmKeydown = 0x0100;
-
-        private Button _btnBack;
-        private Button _btnCancel;
-        private Button _btnFinish;
-        private Button _btnHelp;
-        private Button _btnNext;
-        private Panel _pnlButtons;
-
-        private readonly AdvancedWizardPageCollection _pages;
-        private bool _finishButton = true;
-        private bool _helpButton = true;
-        private AdvancedWizardPage _lastPage;
-
-        internal bool NextButtonEnabledState;
-        private bool _pageSetAsFinishPage;
-        private int _selectedPage;
-        private ISelectionService _selectionService;
-        private readonly WizardStrategy _wizardStrategy;
-
-        private string _backButtonText = "< Back";
-        private ButtonLayoutKind _buttonLayoutKind;
-        private bool _buttonsVisible = true;
-        private string _cancelButtonText = "&Cancel";
-        private string _finishButtonText = "&Finish";
-        private string _helpButtonText = "&Help";
-        private string _nextButtonText = "Next >";
-        private bool _processKeys;
-        private string _tempNextText = "Next >";
-        private bool _touchScreen;
-
         private void InitializeComponent()
         {
             _pnlButtons = new Panel();
@@ -127,21 +92,15 @@ namespace AdvancedWizardControl.Wizard
             ResumeLayout(false);
         }
 
-        private void AllowKeyPressesToNavigateWizard()
-        {
-            Application.AddMessageFilter(this);
-        }
+        private void AllowKeyPressesToNavigateWizard() => Application.AddMessageFilter(this);
 
         private void SetButtonLocationsForOfficeLayout()
         {
-            _btnHelp.Left = (_pnlButtons.Width - _btnHelp.Width) - 12;
-            _btnCancel.Left = (_btnHelp.Left - _btnCancel.Width) - 5;
-            _btnFinish.Left = (_btnCancel.Left - _btnFinish.Width) - 5;
-            if (_finishButton)
-                _btnNext.Left = (_btnFinish.Left - _btnNext.Width) - 5;
-            else
-                _btnNext.Left = _btnFinish.Left;
-            _btnBack.Left = (_btnNext.Left - _btnBack.Width);
+            _btnHelp.Left = _pnlButtons.Width - _btnHelp.Width - 12;
+            _btnCancel.Left = _btnHelp.Left - _btnCancel.Width - 5;
+            _btnFinish.Left = _btnCancel.Left - _btnFinish.Width - 5;
+            _btnNext.Left = _finishButton ? _btnFinish.Left - _btnNext.Width - 5 : _btnFinish.Left;
+            _btnBack.Left = _btnNext.Left - _btnBack.Width;
         }
 
         private void SetTabOrderForOfficeLayout()
@@ -159,37 +118,27 @@ namespace AdvancedWizardControl.Wizard
             if (hasFinishButton)
             {
                 _btnFinish.Visible = true;
-                if (_btnHelp.Visible)
-                    _btnCancel.Left = (_btnHelp.Left - _btnCancel.Width - 5);
-                else
-                    _btnCancel.Left = _btnHelp.Left;
-                _btnNext.Left = (_btnFinish.Left - _btnFinish.Width - 5);
-                _btnBack.Left = (_btnNext.Left - _btnNext.Width);
-
-                if (IndexOfCurrentPage() == _pages.Count - 1) // last page
-                    _btnNext.Text = _nextButtonText;
+                _btnCancel.Left = _btnHelp.Visible ? _btnHelp.Left - _btnCancel.Width - 5 : _btnHelp.Left;
+                _btnNext.Left = _btnFinish.Left - _btnFinish.Width - 5;
+                _btnBack.Left = _btnNext.Left - _btnNext.Width;
+                _btnNext.Text = _nextButtonText;
             }
             else
             {
                 _btnFinish.Visible = false;
-                if (_btnHelp.Visible)
-                    _btnCancel.Left = (_btnHelp.Left - _btnCancel.Width - 5);
-                else
-                    _btnCancel.Left = _btnHelp.Left;
+                _btnCancel.Left = _btnHelp.Visible ? _btnHelp.Left - _btnCancel.Width - 5 : _btnHelp.Left;
                 _btnNext.Left = _btnFinish.Left;
-                _btnBack.Left = (_btnNext.Left - _btnNext.Width);
-
-                if (IndexOfCurrentPage() == _pages.Count - 1) // last page
-                    _btnNext.Text = _finishButtonText;
+                _btnBack.Left = _btnNext.Left - _btnNext.Width;
+                _btnNext.Text = IndexOfCurrentPage() == WizardPages.Count - 1 ? _finishButtonText: _nextButtonText;
             }
         }
 
         private void SetButtonLocationsForDefaultLayout()
         {
-            _btnFinish.Left = (_pnlButtons.Width - _btnFinish.Width) - 12;
-            _btnNext.Left = (_btnFinish.Left - _btnNext.Width) - 5;
-            _btnBack.Left = (_btnNext.Left - _btnBack.Width) - 5;
-            _btnCancel.Left = (_btnBack.Left - _btnCancel.Width) - 5;
+            _btnFinish.Left = _pnlButtons.Width - _btnFinish.Width - 12;
+            _btnNext.Left = _btnFinish.Left - _btnNext.Width - 5;
+            _btnBack.Left = _btnNext.Left - _btnBack.Width - 5;
+            _btnCancel.Left = _btnBack.Left - _btnCancel.Width - 5;
             _btnHelp.Left = 12;
         }
 
@@ -208,38 +157,32 @@ namespace AdvancedWizardControl.Wizard
             if (hasFinishButton)
             {
                 _btnFinish.Visible = true;
-                _btnNext.Left = (_btnFinish.Left - _btnFinish.Width - 5);
-                _btnBack.Left = (_btnNext.Left - _btnNext.Width);
-                _btnCancel.Left = (_btnBack.Left - _btnBack.Width - 5);
-
-                if (IndexOfCurrentPage() == _pages.Count - 1) // last page
-                    _btnNext.Text = _nextButtonText;
+                _btnNext.Left = _btnFinish.Left - _btnFinish.Width - 5;
+                _btnBack.Left = _btnNext.Left - _btnNext.Width;
+                _btnCancel.Left = _btnBack.Left - _btnBack.Width - 5;
+                _btnNext.Text = _nextButtonText;
             }
             else
             {
                 _btnFinish.Visible = false;
                 _btnNext.Left = _btnFinish.Left;
-                _btnBack.Left = (_btnNext.Left - _btnNext.Width);
-                _btnCancel.Left = (_btnBack.Left - _btnBack.Width - 5);
-
-                if (IndexOfCurrentPage() == _pages.Count - 1) // last page
-                    _btnNext.Text = _finishButtonText;
+                _btnBack.Left = _btnNext.Left - _btnNext.Width;
+                _btnCancel.Left = _btnBack.Left - _btnBack.Width - 5;
+                _btnNext.Text = IndexOfCurrentPage() == WizardPages.Count - 1 ? _finishButtonText : _nextButtonText;
             }
         }
 
-        private void ShowHelpAndFinishButtons()
+        private void ShowAllButtons()
         {
             FinishButton = true;
             HelpButton = true;
-        }
-
-        private void ProcessButtonVisibleValue(bool val)
-        {
-            _pnlButtons.Visible = val;
+            CancelButton = true;
         }
 
         private void ProcessTouchScreenValue(bool val)
         {
+            _touchScreen = val;
+
             if (val)
             {
                 _pnlButtons.Height = 60;
@@ -267,11 +210,35 @@ namespace AdvancedWizardControl.Wizard
             _btnFinish.Top = 8;
         }
 
-        private void GetSelectionService()
-        {
-            _selectionService = (ISelectionService)GetService(typeof(ISelectionService));
-        }
+        private const int VkEscape = 27;
+        private const int VkReturn = 13;
+        private const int WmKeydown = 0x0100;
 
-        #endregion
+        private Button _btnBack;
+        private Button _btnCancel;
+        private Button _btnFinish;
+        private Button _btnHelp;
+        private Button _btnNext;
+        private Panel _pnlButtons;
+
+        private bool _finishButton = true;
+        private bool _helpButton = true;
+        private AdvancedWizardPage _lastPage;
+
+        internal bool NextButtonEnabledState;
+        private bool _pageSetAsFinishPage;
+        private int _selectedPage;
+        private ISelectionService _selectionService;
+        private readonly WizardStrategy _wizardStrategy;
+
+        private string _backButtonText = "< Back";
+        private ButtonLayoutKind _buttonLayoutKind;
+        private bool _buttonsVisible = true;
+        private string _cancelButtonText = "&Cancel";
+        private string _finishButtonText = "&Finish";
+        private string _helpButtonText = "&Help";
+        private string _nextButtonText = "Next >";
+        private string _tempNextText = "Next >";
+        private bool _touchScreen;
     }
 }

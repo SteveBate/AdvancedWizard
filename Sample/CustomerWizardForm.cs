@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using AdvancedWizardControl.Enums;
 using AdvancedWizardControl.EventArguments;
 
 namespace Sample
@@ -11,25 +12,82 @@ namespace Sample
             InitializeComponent();
             advancedWizard1.FlatStyle = FlatStyle.Standard;
             advancedWizard1.NextButtonEnabled = true;
-            advancedWizard1.LastPage += advancedWizard1_LastPage;
         }
 
-        private void advancedWizard1_LastPage(object sender, EventArgs e)
+        private void WhenPage2IsShown(object sender, WizardPageEventArgs e)
         {
-            MessageBox.Show("last page!");
+            MessageBox.Show(@"Showing page 2");
         }
 
-        private void advancedWizard1_Next(object sender, WizardEventArgs e)
+        private void WhenUserClicksNext(object sender, WizardEventArgs e)
         {
+            if (e.CurrentPageIndex != 1) return;
+
+            errorProvider1.SetError(txtFirstName, string.IsNullOrEmpty(txtFirstName.Text) ? txtFirstName.Tag.ToString() : string.Empty);
+            errorProvider1.SetError(txtSurname, string.IsNullOrEmpty(txtSurname.Text) ? txtSurname.Tag.ToString() : string.Empty);
+            e.AllowPageChange = !string.IsNullOrEmpty(txtFirstName.Text) && !string.IsNullOrEmpty(txtSurname.Text);
         }
 
-        private void advancedWizard1_Finish(object sender, EventArgs e)
+        private void WhenUserClicksBack(object sender, WizardEventArgs e)
         {
+            if (e.CurrentPageIndex == 2)
+            {
+                var answer = MessageBox.Show(@"Go back. Are you sure?", @"Close DataPort", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                e.AllowPageChange = answer != DialogResult.Cancel;
+            }
         }
 
-        private void wizardPage1_PageShow(object sender, WizardPageEventArgs e)
+        private void WhenOnLastPage(object sender, EventArgs e)
         {
-            MessageBox.Show("PageShow");
+            MessageBox.Show(@"last page!");
+        }
+
+        private void WhenUserClicksFinish(object sender, EventArgs e)
+        {
+            MessageBox.Show(@"You clicked Finish");
+        }
+
+        private void WhenUserClicksCancel(object sender, EventArgs e)
+        {
+            MessageBox.Show(@"You clicked Cancel");
+        }
+
+        private void WhenUserClicksHelp(object sender, EventArgs e)
+        {
+            MessageBox.Show(@"You clicked Help");
+        }
+
+        private void txtFirstName_TextChanged(object sender, EventArgs e)
+        {
+            var ctl = (Control) sender;
+            errorProvider1.SetError(ctl, string.IsNullOrEmpty(ctl.Text) ? ctl.Tag.ToString() : string.Empty);
+        }
+
+        private void OnHelpCheckChange(object sender, EventArgs e)
+        {
+            advancedWizard1.HelpButton = chkHelp.Checked;
+        }
+
+        private void OnCancelCheckChange(object sender, EventArgs e)
+        {
+            advancedWizard1.CancelButton = chkCancel.Checked;
+        }
+
+        private void OnFinishCheckChange(object sender, EventArgs e)
+        {
+            advancedWizard1.FinishButton = chkFinish.Checked;
+        }
+
+        private void OnDefaultCheckChange(object sender, EventArgs e)
+        {
+            advancedWizard1.ButtonLayout = ButtonLayoutKind.Default;
+            chkCancel.Checked = chkHelp.Checked = chkFinish.Checked = true;
+        }
+
+        private void OnOfficeCheckChange(object sender, EventArgs e)
+        {
+            advancedWizard1.ButtonLayout = ButtonLayoutKind.Office97;
+            chkCancel.Checked = chkHelp.Checked = chkFinish.Checked = true;
         }
     }
 }

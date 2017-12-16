@@ -5,16 +5,11 @@ namespace AdvancedWizardControl.EventArguments
 {
     public class WizardPageEventArgs : EventArgs
     {
-        private readonly AdvancedWizardPage _page;
-
         public WizardPageEventArgs(AdvancedWizardPage page)
         {
-            _page = page;
+            Page = page;
         }
 
-        public AdvancedWizardPage Page
-        {
-            get { return _page; }
-        }
+        public AdvancedWizardPage Page { get; }
     }
 }

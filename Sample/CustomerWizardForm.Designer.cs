@@ -35,16 +35,25 @@ namespace Sample
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomerWizardForm));
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.advancedWizard1 = new AdvancedWizardControl.Wizard.AdvancedWizard();
-            this.wizardPage1 = new AdvancedWizardPage();
+            this.wizardPageTitle = new AdvancedWizardControl.WizardPages.AdvancedWizardPage();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.chkFinish = new System.Windows.Forms.CheckBox();
+            this.chkCancel = new System.Windows.Forms.CheckBox();
+            this.chkHelp = new System.Windows.Forms.CheckBox();
+            this.rbtnOffice = new System.Windows.Forms.RadioButton();
+            this.rbtnDefault = new System.Windows.Forms.RadioButton();
+            this.wizardPage1 = new AdvancedWizardControl.WizardPages.AdvancedWizardPage();
             this.txtSurname = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.txtInitial = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtFirstName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.wizardPage2 = new AdvancedWizardPage();
+            this.wizardPage2 = new AdvancedWizardControl.WizardPages.AdvancedWizardPage();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox8 = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -56,21 +65,30 @@ namespace Sample
             this.label5 = new System.Windows.Forms.Label();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.wizardPage3 = new AdvancedWizardPage();
+            this.wizardPage3 = new AdvancedWizardControl.WizardPages.AdvancedWizardPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.advancedWizard1.SuspendLayout();
+            this.wizardPageTitle.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.wizardPage1.SuspendLayout();
             this.wizardPage2.SuspendLayout();
             this.wizardPage3.SuspendLayout();
             this.SuspendLayout();
             // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            // 
             // advancedWizard1
             // 
             this.advancedWizard1.BackButtonEnabled = false;
             this.advancedWizard1.BackButtonText = "< Back";
-            this.advancedWizard1.ButtonLayout = ButtonLayoutKind.Default;
+            this.advancedWizard1.ButtonLayout = AdvancedWizardControl.Enums.ButtonLayoutKind.Default;
             this.advancedWizard1.ButtonsVisible = true;
+            this.advancedWizard1.CancelButton = true;
             this.advancedWizard1.CancelButtonText = "&Cancel";
+            this.advancedWizard1.Controls.Add(this.wizardPageTitle);
             this.advancedWizard1.Controls.Add(this.wizardPage1);
             this.advancedWizard1.Controls.Add(this.wizardPage2);
             this.advancedWizard1.Controls.Add(this.wizardPage3);
@@ -85,16 +103,117 @@ namespace Sample
             this.advancedWizard1.Location = new System.Drawing.Point(0, 0);
             this.advancedWizard1.Name = "advancedWizard1";
             this.advancedWizard1.NextButtonEnabled = true;
-            this.advancedWizard1.NextButtonText = "Next >";
+            this.advancedWizard1.NextButtonText = "&Next";
             this.advancedWizard1.ProcessKeys = false;
             this.advancedWizard1.Size = new System.Drawing.Size(724, 480);
             this.advancedWizard1.TabIndex = 0;
             this.advancedWizard1.TouchScreen = false;
+            this.advancedWizard1.WizardPages.Add(this.wizardPageTitle);
             this.advancedWizard1.WizardPages.Add(this.wizardPage1);
             this.advancedWizard1.WizardPages.Add(this.wizardPage2);
             this.advancedWizard1.WizardPages.Add(this.wizardPage3);
-            this.advancedWizard1.Next += new System.EventHandler<WizardEventArgs>(this.advancedWizard1_Next);
-            this.advancedWizard1.Finish += new System.EventHandler(this.advancedWizard1_Finish);
+            this.advancedWizard1.Cancel += new System.EventHandler(this.WhenUserClicksCancel);
+            this.advancedWizard1.Next += new System.EventHandler<AdvancedWizardControl.EventArguments.WizardEventArgs>(this.WhenUserClicksNext);
+            this.advancedWizard1.Back += new System.EventHandler<AdvancedWizardControl.EventArguments.WizardEventArgs>(this.WhenUserClicksBack);
+            this.advancedWizard1.Finish += new System.EventHandler(this.WhenUserClicksFinish);
+            this.advancedWizard1.Help += new System.EventHandler(this.WhenUserClicksHelp);
+            this.advancedWizard1.LastPage += new System.EventHandler(this.WhenOnLastPage);
+            // 
+            // wizardPageTitle
+            // 
+            this.wizardPageTitle.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.wizardPageTitle.Controls.Add(this.groupBox2);
+            this.wizardPageTitle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardPageTitle.Header = true;
+            this.wizardPageTitle.HeaderBackgroundColor = System.Drawing.Color.White;
+            this.wizardPageTitle.HeaderFont = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Bold);
+            this.wizardPageTitle.HeaderImage = ((System.Drawing.Image)(resources.GetObject("wizardPageTitle.HeaderImage")));
+            this.wizardPageTitle.HeaderImageVisible = true;
+            this.wizardPageTitle.HeaderTitle = "Welcome to Advanced Wizard";
+            this.wizardPageTitle.Location = new System.Drawing.Point(0, 0);
+            this.wizardPageTitle.Name = "wizardPageTitle";
+            this.wizardPageTitle.PreviousPage = 0;
+            this.wizardPageTitle.Size = new System.Drawing.Size(724, 440);
+            this.wizardPageTitle.SubTitle = "Your page description goes here";
+            this.wizardPageTitle.SubTitleFont = new System.Drawing.Font("Tahoma", 8F);
+            this.wizardPageTitle.TabIndex = 4;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.chkFinish);
+            this.groupBox2.Controls.Add(this.chkCancel);
+            this.groupBox2.Controls.Add(this.chkHelp);
+            this.groupBox2.Controls.Add(this.rbtnOffice);
+            this.groupBox2.Controls.Add(this.rbtnDefault);
+            this.groupBox2.Location = new System.Drawing.Point(112, 129);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(499, 242);
+            this.groupBox2.TabIndex = 1;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "groupBox2";
+            // 
+            // chkFinish
+            // 
+            this.chkFinish.AutoSize = true;
+            this.chkFinish.Checked = true;
+            this.chkFinish.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkFinish.Location = new System.Drawing.Point(93, 158);
+            this.chkFinish.Name = "chkFinish";
+            this.chkFinish.Size = new System.Drawing.Size(88, 17);
+            this.chkFinish.TabIndex = 4;
+            this.chkFinish.Text = "Finish Button";
+            this.chkFinish.UseVisualStyleBackColor = true;
+            this.chkFinish.CheckedChanged += new System.EventHandler(this.OnFinishCheckChange);
+            // 
+            // chkCancel
+            // 
+            this.chkCancel.AutoSize = true;
+            this.chkCancel.Checked = true;
+            this.chkCancel.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkCancel.Location = new System.Drawing.Point(93, 135);
+            this.chkCancel.Name = "chkCancel";
+            this.chkCancel.Size = new System.Drawing.Size(93, 17);
+            this.chkCancel.TabIndex = 3;
+            this.chkCancel.Text = "Cancel Button";
+            this.chkCancel.UseVisualStyleBackColor = true;
+            this.chkCancel.CheckedChanged += new System.EventHandler(this.OnCancelCheckChange);
+            // 
+            // chkHelp
+            // 
+            this.chkHelp.AutoSize = true;
+            this.chkHelp.Checked = true;
+            this.chkHelp.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkHelp.Location = new System.Drawing.Point(93, 112);
+            this.chkHelp.Name = "chkHelp";
+            this.chkHelp.Size = new System.Drawing.Size(82, 17);
+            this.chkHelp.TabIndex = 2;
+            this.chkHelp.Text = "Help Button";
+            this.chkHelp.UseVisualStyleBackColor = true;
+            this.chkHelp.CheckedChanged += new System.EventHandler(this.OnHelpCheckChange);
+            // 
+            // rbtnOffice
+            // 
+            this.rbtnOffice.AutoSize = true;
+            this.rbtnOffice.Location = new System.Drawing.Point(74, 78);
+            this.rbtnOffice.Name = "rbtnOffice";
+            this.rbtnOffice.Size = new System.Drawing.Size(105, 17);
+            this.rbtnOffice.TabIndex = 1;
+            this.rbtnOffice.Text = "Office 97 Layout";
+            this.rbtnOffice.UseVisualStyleBackColor = true;
+            this.rbtnOffice.CheckedChanged += new System.EventHandler(this.OnOfficeCheckChange);
+            // 
+            // rbtnDefault
+            // 
+            this.rbtnDefault.AutoSize = true;
+            this.rbtnDefault.Checked = true;
+            this.rbtnDefault.Location = new System.Drawing.Point(74, 55);
+            this.rbtnDefault.Name = "rbtnDefault";
+            this.rbtnDefault.Size = new System.Drawing.Size(96, 17);
+            this.rbtnDefault.TabIndex = 0;
+            this.rbtnDefault.TabStop = true;
+            this.rbtnDefault.Text = "Default Layout";
+            this.rbtnDefault.UseVisualStyleBackColor = true;
+            this.rbtnDefault.CheckedChanged += new System.EventHandler(this.OnDefaultCheckChange);
             // 
             // wizardPage1
             // 
@@ -119,7 +238,6 @@ namespace Sample
             this.wizardPage1.SubTitle = "Enter customer name details - All fields are required";
             this.wizardPage1.SubTitleFont = new System.Drawing.Font("Tahoma", 8F);
             this.wizardPage1.TabIndex = 1;
-            this.wizardPage1.PageShow += new System.EventHandler<WizardPageEventArgs>(this.wizardPage1_PageShow);
             // 
             // txtSurname
             // 
@@ -127,6 +245,8 @@ namespace Sample
             this.txtSurname.Name = "txtSurname";
             this.txtSurname.Size = new System.Drawing.Size(244, 21);
             this.txtSurname.TabIndex = 6;
+            this.txtSurname.Tag = "Last Name is required";
+            this.txtSurname.TextChanged += new System.EventHandler(this.txtFirstName_TextChanged);
             // 
             // label3
             // 
@@ -159,6 +279,8 @@ namespace Sample
             this.txtFirstName.Name = "txtFirstName";
             this.txtFirstName.Size = new System.Drawing.Size(244, 21);
             this.txtFirstName.TabIndex = 2;
+            this.txtFirstName.Tag = "First Name is required";
+            this.txtFirstName.TextChanged += new System.EventHandler(this.txtFirstName_TextChanged);
             // 
             // label1
             // 
@@ -192,11 +314,12 @@ namespace Sample
             this.wizardPage2.HeaderTitle = "New Customer Wizard";
             this.wizardPage2.Location = new System.Drawing.Point(0, 0);
             this.wizardPage2.Name = "wizardPage2";
-            this.wizardPage2.PreviousPage = 0;
+            this.wizardPage2.PreviousPage = 1;
             this.wizardPage2.Size = new System.Drawing.Size(724, 440);
             this.wizardPage2.SubTitle = "Enter a house number and post code, then click Find";
             this.wizardPage2.SubTitleFont = new System.Drawing.Font("Tahoma", 8F);
             this.wizardPage2.TabIndex = 2;
+            this.wizardPage2.PageShow += new System.EventHandler<AdvancedWizardControl.EventArguments.WizardPageEventArgs>(this.WhenPage2IsShown);
             // 
             // button1
             // 
@@ -300,7 +423,7 @@ namespace Sample
             this.wizardPage3.HeaderTitle = "New Customer Wizard";
             this.wizardPage3.Location = new System.Drawing.Point(0, 0);
             this.wizardPage3.Name = "wizardPage3";
-            this.wizardPage3.PreviousPage = 1;
+            this.wizardPage3.PreviousPage = 2;
             this.wizardPage3.Size = new System.Drawing.Size(724, 440);
             this.wizardPage3.SubTitle = "Check the details are correct then click Finish";
             this.wizardPage3.SubTitleFont = new System.Drawing.Font("Tahoma", 8F);
@@ -326,7 +449,11 @@ namespace Sample
             this.Name = "CustomerWizardForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "AdvancedWizard Sample";
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.advancedWizard1.ResumeLayout(false);
+            this.wizardPageTitle.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.wizardPage1.ResumeLayout(false);
             this.wizardPage1.PerformLayout();
             this.wizardPage2.ResumeLayout(false);
@@ -360,5 +487,13 @@ namespace Sample
         private Label label4;
         private Button button1;
         private GroupBox groupBox1;
+        private ErrorProvider errorProvider1;
+        private AdvancedWizardPage wizardPageTitle;
+        private GroupBox groupBox2;
+        private CheckBox chkFinish;
+        private CheckBox chkCancel;
+        private CheckBox chkHelp;
+        private RadioButton rbtnOffice;
+        private RadioButton rbtnDefault;
     }
 }

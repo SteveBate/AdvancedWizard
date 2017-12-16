@@ -18,24 +18,16 @@ namespace AdvancedWizardControl.Wizard
     /// </summary>
     internal class AdvancedWizardPageDesigner : ParentControlDesigner
     {
-        #region public
-
-        public override SelectionRules SelectionRules
-        {
-            get { return DoNotAllowPageToBeManipulatedByMouse(); }
-        }
-
         public override void Initialize(IComponent c)
         {
             base.Initialize(c);
-            GetReferenceToWizardPage();
-            InitializeWizardPage();
-            InitializeDesigner();
+            _page = (AdvancedWizardPage) Control;
+            _page.AllowDrop = false;
+            DrawGrid = true;
+            EnableDragDrop(true);
         }
 
-        #endregion
-
-        #region protected
+        public override SelectionRules SelectionRules => base.SelectionRules & SelectionRules.None;
 
         protected override void OnDragDrop(DragEventArgs de)
         {
@@ -43,33 +35,6 @@ namespace AdvancedWizardControl.Wizard
             base.OnDragDrop(de);
         }
 
-        #endregion
-
-        #region private
-
         private AdvancedWizardPage _page;
-
-        private void GetReferenceToWizardPage()
-        {
-            _page = (Control as AdvancedWizardPage);
-        }
-
-        private void InitializeWizardPage()
-        {
-            _page.AllowDrop = false;
-        }
-
-        private void InitializeDesigner()
-        {
-            DrawGrid = true;
-            EnableDragDrop(true);
-        }      
-
-        private SelectionRules DoNotAllowPageToBeManipulatedByMouse()
-        {
-            return base.SelectionRules & SelectionRules.None;
-        }
-
-        #endregion
     }
 }

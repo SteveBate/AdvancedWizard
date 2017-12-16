@@ -4,3 +4,7 @@ to help me learn C#. Whilst the code shows many things that today I would do dif
 Hope you find it useful.
 
 Steve Bate
+
+EDIT: Wednesday 13th December 2017
+
+I have finally brought the code up to a more modern standard taking advantage of C# 7.0 features in particular

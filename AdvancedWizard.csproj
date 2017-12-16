@@ -136,6 +136,9 @@
     <Compile Include="EventArguments\WizardEventArgs.cs" />
     <Compile Include="Strategies\DesignTimeWizard.cs" />
     <Compile Include="Strategies\RuntimeWizard.cs" />
+    <Compile Include="Wizard\AdvancedWizard.Internal.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Wizard\AdvancedWizard.Private.cs">
       <SubType>UserControl</SubType>
     </Compile>

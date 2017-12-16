@@ -6,16 +6,10 @@ namespace AdvancedWizardControl.Strategies
 {
     public class DesignTimeWizardStrategy : WizardStrategy
     {
-        #region constructor
-        
         public DesignTimeWizardStrategy(AdvancedWizard wizard)
         {
             _wizard = wizard;
-        } 
-
-        #endregion
-
-        #region public
+        }
 
         public override void Loading()
         {
@@ -69,21 +63,6 @@ namespace AdvancedWizardControl.Strategies
             }
         }
 
-        public override void Cancel()
-        {
-            // stub - not required at design time
-        }
-
-        public override void Help()
-        {
-            // stub - not required at design time
-        }
-
-        public override void Finish()
-        {
-            // stub - not required at design time
-        }
-
         public override void Back(ISelectionService selection)
         {
             _wizard.SelectPreviousPage();
@@ -98,27 +77,18 @@ namespace AdvancedWizardControl.Strategies
             SelectPageInProperyGrid(selection);
         }
 
-        public override void GoToPage(int pageIndex)
-        {
-            // stub - not required at design time
-        }
+        public override void Cancel() { /* stub - not required at design time */ }
 
-        public override void GoToPage(AdvancedWizardPage page)
-        {
-            // stub - not required at design time
-        }
+        public override void Help() { /* stub - not required at design time */ }
 
-        #endregion
+        public override void Finish() { /* tub - not required at design time */ }
 
-        #region private
+        public override void GoToPage(int pageIndex) { /*stub - not required at design time*/ }
+
+        public override void GoToPage(AdvancedWizardPage page) { /* stub - not required at design time */ }
+
+        private void SelectPageInProperyGrid(ISelectionService selection) => selection.SetSelectedComponents(new object[] {_wizard.CurrentPage}, SelectionTypes.MouseDown);
 
         private readonly AdvancedWizard _wizard;
-
-        private void SelectPageInProperyGrid(ISelectionService selection)
-        {
-            selection.SetSelectedComponents(new object[] {_wizard.CurrentPage}, SelectionTypes.MouseDown);
-        }
-
-        #endregion
     }
 }

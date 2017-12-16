@@ -13,34 +13,14 @@ namespace AdvancedWizardControl.WizardPages
     /// </summary>
     [Designer(typeof (AdvancedWizardPageDesigner))]
     [ToolboxItem(false)]
-    public partial class AdvancedWizardPage : Panel
+    public class AdvancedWizardPage : Panel
     {
-        #region constructor
-
         public AdvancedWizardPage()
         {
             SetupHeader();
             SetupHeaderImage();
             SetupWizardText();
         }
-
-        #endregion
-
-        #region internal
-
-        internal void FirePageShowEvent()
-        {
-            PageShow(this, new WizardPageEventArgs(this));
-        }
-
-        internal Panel HeaderPanel;
-        internal PictureBox WizardImage;
-        internal Label WizardSubText;
-        internal Label WizardText;
-
-        #endregion
-
-        #region public
 
         /// <summary>
         /// Allow an Image to be assigned to the wizard header
@@ -50,8 +30,8 @@ namespace AdvancedWizardControl.WizardPages
         [Description("A 48x48 image for the wizard header")]
         public Image HeaderImage
         {
-            get { return WizardImage.Image; }
-            set { WizardImage.Image = value; }
+            get => WizardImage.Image;
+            set => WizardImage.Image = value;
         }
 
         // Specify whether or not image is shown
@@ -59,7 +39,7 @@ namespace AdvancedWizardControl.WizardPages
         [Description("Shows/Hides the image in the header")]
         public bool HeaderImageVisible
         {
-            get { return _imageVisible; }
+            get => _imageVisible;
             set
             {
                 _imageVisible = value;
@@ -72,8 +52,8 @@ namespace AdvancedWizardControl.WizardPages
         [Description("The background color for the header")]
         public Color HeaderBackgroundColor
         {
-            get { return HeaderPanel.BackColor; }
-            set { HeaderPanel.BackColor = value; }
+            get => HeaderPanel.BackColor;
+            set => HeaderPanel.BackColor = value;
         }
 
         // Specify the main text for the page
@@ -82,8 +62,8 @@ namespace AdvancedWizardControl.WizardPages
         [Localizable(true)]
         public string HeaderTitle
         {
-            get { return WizardText.Text; }
-            set { WizardText.Text = value; }
+            get => WizardText.Text;
+            set => WizardText.Text = value;
         }
 
         // Specify the font used for text on the Header
@@ -91,8 +71,8 @@ namespace AdvancedWizardControl.WizardPages
         [Description("The font for the header title")]
         public Font HeaderFont
         {
-            get { return WizardText.Font; }
-            set { WizardText.Font = value; }
+            get => WizardText.Font;
+            set => WizardText.Font = value;
         }
 
         // Specify the subtext for the page
@@ -101,8 +81,8 @@ namespace AdvancedWizardControl.WizardPages
         [Localizable(true)]
         public string SubTitle
         {
-            get { return WizardSubText.Text; }
-            set { WizardSubText.Text = value; }
+            get => WizardSubText.Text;
+            set => WizardSubText.Text = value;
         }
 
         // Specify the font used for text on the subtitle
@@ -110,8 +90,8 @@ namespace AdvancedWizardControl.WizardPages
         [Description("The font for the subtitle")]
         public Font SubTitleFont
         {
-            get { return WizardSubText.Font; }
-            set { WizardSubText.Font = value; }
+            get => WizardSubText.Font;
+            set => WizardSubText.Font = value;
         }
 
         // Specify whether or not the header is shown
@@ -120,7 +100,7 @@ namespace AdvancedWizardControl.WizardPages
             "The header gives you a head start in designing your pages. Turn it off for complete freedom of design.")]
         public bool Header
         {
-            get { return _headerVisible; }
+            get => _headerVisible;
             set
             {
                 _headerVisible = value;
@@ -128,20 +108,20 @@ namespace AdvancedWizardControl.WizardPages
             }
         }
 
-        // get the index of the page before the current page
-        [Browsable(false)]
-        public int PreviousPage { get; set; }
-
         [Category("Wizard")]
         [Description("Fires when the page is shown")]
         public event EventHandler<WizardPageEventArgs> PageShow = delegate { };
 
-        #endregion
+        // get the index of the page before the current page
+        [Browsable(false)]
+        public int PreviousPage { get; set; }
 
-        #region private
+        internal void FirePageShowEvent() => PageShow(this, new WizardPageEventArgs(this));
 
-        private bool _headerVisible;
-        private bool _imageVisible;
+        internal Panel HeaderPanel;
+        internal PictureBox WizardImage;
+        internal Label WizardSubText;
+        internal Label WizardText;
 
         private void SetupHeader()
         {
@@ -193,6 +173,7 @@ namespace AdvancedWizardControl.WizardPages
             };
         }
 
-        #endregion
+        private bool _headerVisible;
+        private bool _imageVisible;
     }
 }
