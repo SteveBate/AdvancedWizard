@@ -30,7 +30,7 @@ namespace AdvancedWizardControl.Strategies
             {
                 _wizard.BackButtonEnabled = false;
                 _wizard.NextButtonEnabled = true;
-                _wizard.SetButtonText("btnNext", _wizard.ReadNextText());
+                _wizard.SetButtonText("_btnNext", _wizard.ReadNextText());
                 return;
             }
 
@@ -45,7 +45,7 @@ namespace AdvancedWizardControl.Strategies
             {
                 _wizard.BackButtonEnabled = true;
                 _wizard.FinishButtonEnabled = true;
-                _wizard.SetButtonText("btnNext", _wizard.FinishButtonText);
+                _wizard.SetButtonText("_btnNext", _wizard.FinishButtonText);
                 return;
             }
 
@@ -53,7 +53,7 @@ namespace AdvancedWizardControl.Strategies
             {
                 _wizard.BackButtonEnabled = false;
                 _wizard.NextButtonEnabled = false;
-                _wizard.SetButtonText("btnNext", _wizard.ReadNextText());
+                _wizard.SetButtonText("_btnNext", _wizard.ReadNextText());
             }
 
             if (_wizard.OnAMiddlePage())
